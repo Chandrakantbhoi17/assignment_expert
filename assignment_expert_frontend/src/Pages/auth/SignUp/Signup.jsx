@@ -1,0 +1,107 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styles from './Signup.module.css';
+
+import userIcon from '../../../components/Assets/password.png';
+import emailIcon from '../../../components/Assets/email.png';
+import passwordIcon from '../../../components/Assets/password.png';
+
+const Signup = () => {
+  const [full_name, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSignup = async () => {
+    if (!full_name || !email || !password) {
+      alert('Please fill all fields');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch('http://localhost:8000/users/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ full_name, email, password }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Signup failed');
+      }
+
+      const data = await response.json();
+      console.log('Signup successful:', data);
+
+      alert('Signup successful!');
+      navigate('/login');
+    } catch (error) {
+      console.error('Signup error:', error);
+      alert(`Signup failed: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <div className={styles.text}>SignUp</div>
+        <div className={styles.underline}></div>
+      </div>
+
+      <div className={styles.inputs}>
+        <div className={styles.input}>
+          <img src={userIcon} alt="user" />
+          <input
+            type="text"
+            placeholder="Name"
+            value={full_name}
+            onChange={(e) => setFullName(e.target.value)}
+          />
+        </div>
+
+        <div className={styles.input}>
+          <img src={emailIcon} alt="email" />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+
+        <div className={styles.input}>
+          <img src={passwordIcon} alt="password" />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className={styles.submitContainer}>
+        <div
+          className={styles.submit}
+          onClick={handleSignup}
+          style={{ opacity: loading ? 0.5 : 1, pointerEvents: loading ? 'none' : 'auto' }}
+        >
+          {loading ? 'Signing Up...' : 'Sign Up'}
+        </div>
+
+        <div className={styles.submit} onClick={() => navigate('/login')}>
+          Already have an account? Login
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Signup;
