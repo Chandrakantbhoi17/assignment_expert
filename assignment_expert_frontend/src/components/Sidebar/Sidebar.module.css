@@ -1,0 +1,27 @@
+.sidebar {
+  width: 220px;
+  background-color: #1f2937;
+  color: white;
+  height: 100vh;
+  padding: 1rem;
+}
+
+.logo {
+  font-size: 20px;
+  margin-bottom: 2rem;
+}
+
+.nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
+  padding: 0.5rem 0;
+  text-decoration: none;
+}
+
+.nav a:hover {
+  background-color: #374151;
+  border-radius: 4px;
+  padding-left: 0.5rem;
+}

@@ -1,24 +1,20 @@
 import React, { useState } from 'react';
 import './Task.css';
 import { useNavigate } from 'react-router-dom';
-
-const getCookie = (name) => {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(';').shift();
-  return null;
-};
+import Cookies from 'js-cookie';
 
 const AddAssignment = () => {
   const [title, setTitle] = useState('');
   const [details, setDetails] = useState('');
   const [dueDate, setDueDate] = useState('');
+  const [file, setFile] = useState(null); // File state
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const token = getCookie('access_token');
+    const token = Cookies.get('token');
     if (!token) {
       alert('Unauthorized');
       return;
@@ -27,11 +23,14 @@ const AddAssignment = () => {
     const payload = {
       title,
       details,
-      due_date: dueDate, // Already in "YYYY-MM-DD"
+      due_date: dueDate,
     };
 
+    setLoading(true);
+
     try {
-      const response = await fetch('http://172.168.5.59:8000/assignments/create', {
+      // Create the assignment
+      const response = await fetch('http://localhost:8000/assignments/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -40,18 +39,50 @@ const AddAssignment = () => {
         body: JSON.stringify(payload),
       });
 
-      const result = await response.json();
+      let result = null;
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        result = await response.json();
+      }
+
       if (!response.ok) {
         console.error('Error:', result);
-        alert('Failed to submit assignment.');
+        alert((result && result.message) || 'Failed to submit assignment.');
         return;
       }
 
-      alert('Assignment submitted successfully!');
-      navigate('/assignment');
+   
+      // Upload file if provided
+      if (file) {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const uploadResponse = await fetch(
+          `http://localhost:8000/assignments/${result.id}/upload-file`,
+          {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${token}`,
+              // Do NOT manually set Content-Type for FormData
+            },
+            body: formData,
+          }
+        );
+
+        const uploadResult = await uploadResponse.json();
+
+        if (!uploadResponse.ok) {
+          console.error('Upload Error:', uploadResult);
+          alert('Assignment created, but file upload failed.');
+        } 
+      }
+
+      navigate('/user/assignments');
     } catch (error) {
       console.error('Submission error:', error);
-      alert('An error occurred.');
+  
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -61,17 +92,47 @@ const AddAssignment = () => {
         <h2>Add Assignment</h2>
         <form onSubmit={handleSubmit}>
           <label>Title:</label>
-          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
 
           <label>Details:</label>
-          <input type="text" value={details} onChange={(e) => setDetails(e.target.value)} required />
+          <textarea
+            rows="4"
+            value={details}
+            onChange={(e) => setDetails(e.target.value)}
+            required
+          />
 
           <label>Due Date:</label>
-          <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} required />
+          <input
+            type="date"
+            value={dueDate}
+            onChange={(e) => setDueDate(e.target.value)}
+            required
+          />
+
+          <label>Upload File (optional):</label>
+          <input
+            type="file"
+            onChange={(e) => setFile(e.target.files[0])}
+          />
 
           <div className="form-buttons">
-            <button type="submit" className="submit-btn">Submit</button>
-            <button type="button" className="cancel-btn" onClick={() => navigate('/assignment')}>Cancel</button>
+            <button type="submit" className="submit-btn" disabled={loading}>
+              {loading ? 'Submitting...' : 'Submit'}
+            </button>
+            <button
+              type="button"
+              className="cancel-btn"
+              onClick={() => navigate('/assignment')}
+              disabled={loading}
+            >
+              Cancel
+            </button>
           </div>
         </form>
       </div>

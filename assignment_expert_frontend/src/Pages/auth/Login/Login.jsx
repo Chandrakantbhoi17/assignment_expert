@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../context/AuthContext';
 import styles from './Login.module.css';
 
-import emailIcon from '../../../Components/Assets/email.png';
-import passwordIcon from '../../../Components/Assets/password.png';
+import emailIcon from '../../../components/Assets/email.png';
+import passwordIcon from '../../../components/Assets/password.png';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -16,7 +16,7 @@ const Login = () => {
   // ✅ Redirect if already logged in
   useEffect(() => {
     if (user) {
-      navigate('/assignment'); // or wherever you want
+      navigate('/user/dashboard'); // or wherever you want
     }
   }, [user, navigate]);
 
@@ -30,7 +30,7 @@ const Login = () => {
 
     try {
       await login(email, password);
-      navigate('/assignment');
+      navigate('/user/dashboard');
     } catch (error) {
       console.error('Login failed:', error);
       alert('Login failed');

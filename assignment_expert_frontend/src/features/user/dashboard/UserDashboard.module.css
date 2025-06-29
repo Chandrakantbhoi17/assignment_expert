@@ -1,0 +1,36 @@
+.dashboard {
+  padding: 2rem;
+  background: #f9f9f9;
+  min-height: 100vh;
+}
+
+.heading {
+  font-size: 28px;
+  margin-bottom: 1.5rem;
+}
+
+.cardGrid {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.chartPlaceholder {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.fakeChart {
+  margin-top: 1rem;
+  height: 150px;
+  background: #e5e5e5;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #777;
+}
