@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styles from './UserDashboard.module.css';
-import StatCard from '../components/StatCard/StatCards.jsx';
+import StatCard from '../components/StatCard/StatCards.jsx'
 import { AuthContext } from '@/context/AuthContext.jsx';
 import Cookies from "js-cookie";
 import {

@@ -4,45 +4,51 @@
   align-items: center;
   background-color: #24005a;
   height: 80px;
-  color: white;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 999;
+  padding: 0px 30px;
 }
 
-.nav-left {
+.nav_left {
   display: flex;
   align-items: center;
 }
 
+.nav_left h1{
+  color: white;
+  font-size: 25px;
+}
+
 .logo {
   height: 40px;
+  color: white;
   object-fit: contain;
   font-size: 20px;
 }
 
-.nav-right {
+.nav_right {
   display: flex;
   gap: 20px;
   
 }
 
-.nav-link {
+.nav_link {
   color: white;
   text-decoration: none;
-  font-size: 20px;
+  font-size: 23px;
   font-weight: 500;
   transition: color 0.3s ease;
 }
 
-.nav-link:hover {
+.nav_link:hover {
   color: #00bfff;
 }
 
 
-.profile-circle {
+.profile_circle {
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -59,7 +65,7 @@
   transition: background-color 0.3s ease;
 }
 
-.profile-circle:hover {
+.profile_circle:hover {
   background-color: #0099cc;
 }
 

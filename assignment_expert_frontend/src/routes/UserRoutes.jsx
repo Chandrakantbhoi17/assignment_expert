@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import UserLayout from '../layouts/UserLayout/UserLayout';
-import UserDashboard from '../features/user/dashboard/UserDashboard';
+import UserDashboard from '../features/dashboard/UserDashboard';
 import TaskList from '../features/Tasks/TaskList';
 import AddAssignment from '../features/Tasks/TaskCreate';
 import TaskDetails from '../features/Tasks/TaskDetails';
