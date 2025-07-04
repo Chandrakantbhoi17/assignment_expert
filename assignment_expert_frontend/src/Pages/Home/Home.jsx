@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import style from './Home.module.css';
 import assignmentwork from '../../components/Assets/assignmentwork.jpg'; 
-
+import Footer from '../../features/components/footer/footer.jsx';
 function Home() {
   return (
     <div className={style.HomePage}>
@@ -75,6 +75,7 @@ function Home() {
     </div>
   </div>
 </div>
+<Footer/>
 </div>
   );
 }
