@@ -3,6 +3,7 @@ import styles from './UserDashboard.module.css';
 import StatCard from '../components/StatCard/StatCards.jsx'
 import { AuthContext } from '@/context/AuthContext.jsx';
 import Cookies from "js-cookie";
+import apiClient from '../../services/ApiClient.jsx';
 import {
   FaClipboardList,
   FaCheckCircle,
@@ -28,20 +29,13 @@ const UserDashboard = () => {
 
       const endpoint =
         user.role === 'admin'
-          ? 'http://localhost:8000/admin/dashboard/assignment-summary'
-          : 'http://localhost:8000/user/dashboard/assignment-summary';
+          ? '/admin/dashboard/assignment-summary'
+          : '/user/dashboard/assignment-summary';
 
       try {
-        const res = await fetch(endpoint, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-          }
-        });
 
-        if (!res.ok) throw new Error('Failed to load dashboard data');
-
-        const data = await res.json();
+         const res =await apiClient.get(endpoint)
+         const data = await res.data;
         setSummary(data);
       } catch (err) {
         console.error(err);

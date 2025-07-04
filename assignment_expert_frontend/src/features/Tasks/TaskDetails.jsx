@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import { AuthContext } from '@/context/AuthContext.jsx'; // Adjust if needed
+import apiClient from '../../services/ApiClient';
 
 const TaskDetails = () => {
   const { user } = useContext(AuthContext);
@@ -19,12 +20,7 @@ const TaskDetails = () => {
       }
 
       try {
-        const res = await fetch(`http://localhost:8000/assignments/${id}`, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await apiClient.get(`/assignments/${id}`)
 
         if (!res.ok) throw new Error('Failed to load task details');
 

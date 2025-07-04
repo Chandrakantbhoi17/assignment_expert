@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #24005a;
+  background-color: black;
   height: 80px;
   position: fixed;
   top: 0;
@@ -52,7 +52,7 @@
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background-color: #00bfff; 
+  background-color: #b7e6f8; 
   color: white;
   font-weight: bold;
   font-size: 20px;

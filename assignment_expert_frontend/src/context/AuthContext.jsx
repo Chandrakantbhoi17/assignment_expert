@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import Cookies from "js-cookie";
+import apiClient from "../services/ApiClient";
 
 // Create the context
 export const AuthContext = createContext();
@@ -11,17 +12,10 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   // Fetch user info using the token
-  const fetchUser = async (jwt) => {
+  const fetchUser = async () => {
     try {
-      const res = await fetch("http://localhost:8000/auth/me", {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      });
-
-      if (!res.ok) throw new Error("Token invalid");
-
-      const data = await res.json();
+      const res = await apiClient.get("/auth/me")
+      const data = await res.data;
       setUser(data);
     } catch (err) {
       console.error("Auth error:", err);
@@ -43,21 +37,21 @@ export const AuthProvider = ({ children }) => {
   // Login method
   const login = async (email, password) => {
     try {
-      const res = await fetch("http://localhost:8000/auth/token", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const res =await apiClient.post("/auth/token",{email,password})
 
-      if (!res.ok) throw new Error("Login failed");
+    //   const response = await fetch("http://localhost:8000/login/", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({ email, password }),
+    // });
 
-      const data = await res.json();
-      const jwt = data.access_token;
+      const data=await res.data
+      const  jwt=data.access_token;
+    
 
       Cookies.set("token", jwt, { expires: 1 });
       setToken(jwt);
 
-      await fetchUser(jwt); // Fetch user after setting token
     } catch (error) {
       throw error; // Let components handle UI error messages
     }

@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import './Task.css';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import apiClient from '../../services/ApiClient';
 
 const AddAssignment = () => {
   const [title, setTitle] = useState('');
   const [details, setDetails] = useState('');
-  const [dueDate, setDueDate] = useState('');
+  const [due_date, setDueDate] = useState('');
   const [file, setFile] = useState(null); // File state
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -23,21 +24,14 @@ const AddAssignment = () => {
     const payload = {
       title,
       details,
-      due_date: dueDate,
+      due_date: due_date,
     };
 
     setLoading(true);
 
     try {
       // Create the assignment
-      const response = await fetch('http://localhost:8000/assignments/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(payload),
-      });
+      const response = await apiClient.post('/assignments/create',{title,details,due_date})
 
       let result = null;
       const contentType = response.headers.get('content-type');
@@ -110,7 +104,7 @@ const AddAssignment = () => {
           <label>Due Date:</label>
           <input
             type="date"
-            value={dueDate}
+            value={due_date}
             onChange={(e) => setDueDate(e.target.value)}
             required
           />

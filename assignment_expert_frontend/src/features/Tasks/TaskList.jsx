@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { AuthContext } from '@/context/AuthContext.jsx';
+import apiClient from '../../services/ApiClient';
 
 const TaskList = () => {
   const navigate = useNavigate();
@@ -35,23 +36,12 @@ const TaskList = () => {
 
     const endpoint =
       user?.role === 'admin'
-        ? 'http://localhost:8000/assignments'
-        : 'http://localhost:8000/assignments/my';
+        ? '/assignments'
+        : '/assignments/my';
 
     try {
-      const response = await fetch(endpoint, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch assignments');
-      }
-
-      const data = await response.json();
+      const response = await apiClient.get(endpoint)
+      const data = await response.data;
       setTableData(transformData(data));
     } catch (err) {
       setError(err.message);
@@ -63,7 +53,7 @@ const TaskList = () => {
   const handleAction = async (id, action) => {
     const token = Cookies.get('token');
     const assignment = tableData.find((item) => item.id === id);
-    const url = `http://localhost:8000/assignments/${id}`;
+    const url = `/assignments/${id}`;
 
     try {
       const response = await fetch(url, {
