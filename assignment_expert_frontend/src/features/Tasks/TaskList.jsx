@@ -53,7 +53,7 @@ const TaskList = () => {
   const handleAction = async (id, action) => {
     const token = Cookies.get('token');
     const assignment = tableData.find((item) => item.id === id);
-    const url = `/assignments/${id}`;
+    const url = `http://52.66.34.20/assignments/${id}`;
 
     try {
       const response = await fetch(url, {
@@ -168,7 +168,7 @@ const TaskList = () => {
                           className="btn btn-sm btn-success"
                           onClick={async () => {
                             const token = Cookies.get('token');
-                            const url = `http://localhost:8000/assignments/${item.id}`;
+                            const url = `http://52.66.34.20/assignments/${item.id}`;
 
                             try {
                               const response = await fetch(url, {

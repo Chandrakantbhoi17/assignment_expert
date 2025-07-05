@@ -22,7 +22,7 @@ const Signup = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8000/users/register', {
+      const response = await fetch('http://52.66.34.20/users/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -30,13 +30,9 @@ const Signup = () => {
         body: JSON.stringify({ full_name, email, password }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Signup failed');
-      }
+   
 
-      const data = await response.json();
-      console.log('Signup successful:', data);
+    
 
       alert('Signup successful!');
       navigate('/login');

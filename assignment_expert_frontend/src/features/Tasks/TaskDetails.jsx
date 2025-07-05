@@ -10,6 +10,8 @@ const TaskDetails = () => {
   const { id } = useParams();
   const [task, setTask] = useState(null);
   const [error, setError] = useState(null);
+  const [file, setFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     const fetchTask = async () => {
@@ -20,10 +22,7 @@ const TaskDetails = () => {
       }
 
       try {
-        const res = await apiClient.get(`/assignments/${id}`)
-
-
-       
+        const res = await apiClient.get(`/assignments/${id}`);
         setTask(res.data);
       } catch (err) {
         setError(err.message);
@@ -57,7 +56,7 @@ const TaskDetails = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost:8000/create-order/',
+        'http://52.66.34.20/create-order/',
         { amount: halfAmount },
         {
           headers: {
@@ -79,7 +78,7 @@ const TaskDetails = () => {
         handler: async function (paymentResponse) {
           try {
             await axios.post(
-              'http://localhost:8000/verify-payment/',
+              'http://52.66.34.20/verify-payment/',
               {
                 order_id,
                 payment_id: paymentResponse.razorpay_payment_id,
@@ -113,6 +112,53 @@ const TaskDetails = () => {
     } catch (err) {
       console.error('Payment error:', err);
       alert('Failed to initiate payment.');
+    }
+  };
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const handleUpload = async () => {
+    if (!file) {
+      alert('Please select a file to upload.');
+      return;
+    }
+
+    const token = Cookies.get('token');
+    if (!token) {
+      alert('Authentication token missing.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      setUploading(true);
+
+      await axios.post(
+        `http://52.66.34.20/admin/assignments/${id}/upload-final`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      alert('File uploaded successfully!');
+      setFile(null);
+      setUploading(false);
+
+      // Refresh task details
+      const res = await apiClient.get(`/assignments/${id}`);
+      setTask(res.data);
+    } catch (err) {
+      console.error('Upload failed:', err);
+      alert('File upload failed.');
+      setUploading(false);
     }
   };
 
@@ -159,7 +205,19 @@ const TaskDetails = () => {
             <strong>Paid:</strong> ₹{task.total_paid || 0}
           </li>
           <li className="list-group-item">
-            <strong>Assignment:</strong><button >Upload</button>
+            <strong>Final file:</strong>
+            <input
+              type="file"
+              onChange={handleFileChange}
+              className="form-control d-inline w-auto ms-2"
+            />
+            <button
+              className="btn btn-sm btn-outline-primary ms-2"
+              onClick={handleUpload}
+              disabled={uploading}
+            >
+              {uploading ? 'Uploading...' : 'Upload'}
+            </button>
           </li>
 
           {task.completed_url && (

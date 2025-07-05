@@ -33,18 +33,8 @@ const AddAssignment = () => {
       // Create the assignment
       const response = await apiClient.post('/assignments/create',{title,details,due_date})
 
-      let result = null;
-      const contentType = response.headers.get('content-type');
-      if (contentType && contentType.includes('application/json')) {
-        result = await response.json();
-      }
 
-      if (!response.ok) {
-        console.error('Error:', result);
-        alert((result && result.message) || 'Failed to submit assignment.');
-        return;
-      }
-
+   
    
       // Upload file if provided
       if (file) {
@@ -52,7 +42,7 @@ const AddAssignment = () => {
         formData.append('file', file);
 
         const uploadResponse = await fetch(
-          `http://localhost:8000/assignments/${result.id}/upload-file`,
+          `http://52.66.34.20/assignments/${response.data.id}/upload-file`,
           {
             method: 'POST',
             headers: {
@@ -63,12 +53,7 @@ const AddAssignment = () => {
           }
         );
 
-        const uploadResult = await uploadResponse.json();
-
-        if (!uploadResponse.ok) {
-          console.error('Upload Error:', uploadResult);
-          alert('Assignment created, but file upload failed.');
-        } 
+      
       }
 
       navigate('/user/assignments');
