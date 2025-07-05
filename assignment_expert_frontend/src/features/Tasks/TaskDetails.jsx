@@ -22,10 +22,9 @@ const TaskDetails = () => {
       try {
         const res = await apiClient.get(`/assignments/${id}`)
 
-        if (!res.ok) throw new Error('Failed to load task details');
 
-        const data = await res.json();
-        setTask(data);
+       
+        setTask(res.data);
       } catch (err) {
         setError(err.message);
       }
@@ -159,6 +158,10 @@ const TaskDetails = () => {
           <li className="list-group-item">
             <strong>Paid:</strong> ₹{task.total_paid || 0}
           </li>
+          <li className="list-group-item">
+            <strong>Assignment:</strong><button >Upload</button>
+          </li>
+
           {task.completed_url && (
             <li className="list-group-item">
               <strong>Download:</strong>{' '}
