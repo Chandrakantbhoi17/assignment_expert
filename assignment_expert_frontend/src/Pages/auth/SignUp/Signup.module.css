@@ -87,7 +87,7 @@
 .submit {
   flex: 1;
   text-align: center;
-  background-color: purple;
+  background-color: #212121;
   color: white;
   padding: 8px;
   margin: 0 5px;
@@ -97,6 +97,3 @@
   transition: background-color 0.3s ease;
 }
 
-.submit:hover {
-  background-color: #45A049;
-}

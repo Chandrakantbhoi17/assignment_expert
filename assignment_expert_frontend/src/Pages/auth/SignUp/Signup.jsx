@@ -51,7 +51,7 @@ const Signup = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <div className={styles.text}>SignUp</div>
+        <div className="font-bold ">SignUp</div>
         <div className={styles.underline}></div>
       </div>
 
@@ -96,7 +96,7 @@ const Signup = () => {
           {loading ? 'Signing Up...' : 'Sign Up'}
         </div>
 
-        <div className={styles.submit} onClick={() => navigate('/login')}>
+        <div className='mt-2' onClick={() => navigate('/login')}>
           Already have an account? Login
         </div>
       </div>

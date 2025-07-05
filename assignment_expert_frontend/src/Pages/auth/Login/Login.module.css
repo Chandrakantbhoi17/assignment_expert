@@ -27,7 +27,7 @@
 .header .underline {
   width: 90px;
   height: 4px;
-  background-color:purple;
+  background-color: #fe9e9e;
   margin: 8px auto 0;
 }
 
@@ -87,7 +87,7 @@
 .submit {
   flex: 1;
   text-align: center;
-  background-color: purple;
+  background-color: #212121;
   color: white;
   padding: 10px;
   margin: 0 5px;
@@ -96,6 +96,3 @@
   transition: background-color 0.3s ease;
 }
 
-.submit:hover {
-  background-color: #45A049;
-}

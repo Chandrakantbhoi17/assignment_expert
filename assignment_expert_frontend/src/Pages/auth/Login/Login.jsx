@@ -71,7 +71,7 @@ const Login = () => {
 
       <div className={styles.submitContainer}>
         <div
-          className={styles.submit}
+          className={`${styles.submit} px-5 py-2`}
           onClick={handleLogin}
           style={{ opacity: loading ? 0.6 : 1, pointerEvents: loading ? 'none' : 'auto' }}
         >
