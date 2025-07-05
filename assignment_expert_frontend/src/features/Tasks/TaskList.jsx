@@ -112,7 +112,7 @@ const TaskList = () => {
         <div className="alert alert-danger">Error: {error}</div>
       ) : (
         <div className="table-responsive">
-          <table className="table table-bordered table-hover align-middle text-center">
+          <table className="table table-hover align-middle text-center">
             <thead className="table-light">
               <tr>
                 <th>Title</th>
