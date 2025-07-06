@@ -1,65 +1,60 @@
 import React, { useState } from 'react';
 import './Task.css';
 import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
 import apiClient from '../../services/ApiClient';
 
 const AddAssignment = () => {
   const [title, setTitle] = useState('');
   const [details, setDetails] = useState('');
   const [due_date, setDueDate] = useState('');
-  const [file, setFile] = useState(null); // File state
+  const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const token = Cookies.get('token');
-    if (!token) {
-      alert('Unauthorized');
+    if (!title || !details || !due_date) {
+      alert('Please fill out all fields');
       return;
     }
-
-    const payload = {
-      title,
-      details,
-      due_date: due_date,
-    };
 
     setLoading(true);
 
     try {
-      // Create the assignment
-      const response = await apiClient.post('/assignments/create',{title,details,due_date})
+      // Step 1: Create assignment
+      const response = await apiClient.post('/assignments/create', {
+        title,
+        details,
+        due_date,
+      });
 
+      const assignmentId = response.data?.id;
+      if (!assignmentId) {
+        throw new Error('Assignment ID missing in response');
+      }
 
-   
-   
-      // Upload file if provided
+      // Step 2: Upload file if exists
       if (file) {
         const formData = new FormData();
         formData.append('file', file);
 
-        const uploadResponse = await fetch(
-          `http://52.66.34.20/assignments/${response.data.id}/upload-file`,
+        await apiClient.post(
+          `/assignments/${assignmentId}/upload-file`,
+          formData,
           {
-            method: 'POST',
             headers: {
-              Authorization: `Bearer ${token}`,
-              // Do NOT manually set Content-Type for FormData
+              'Content-Type': 'multipart/form-data',
             },
-            body: formData,
           }
         );
-
-      
       }
 
+      // Step 3: Navigate on success
       navigate('/user/assignments');
     } catch (error) {
       console.error('Submission error:', error);
-  
+      alert('Failed to create assignment.');
     } finally {
       setLoading(false);
     }
@@ -68,7 +63,7 @@ const AddAssignment = () => {
   return (
     <div className="add-assignment-page">
       <div className="add-assignment-container">
-        <h2>Add Assignment</h2>
+        <h2>Add Task</h2>
         <form onSubmit={handleSubmit}>
           <label>Title:</label>
           <input
@@ -86,7 +81,7 @@ const AddAssignment = () => {
             required
           />
 
-          <label>Due Date:</label>
+          <label>Deadline:</label>
           <input
             type="date"
             value={due_date}
