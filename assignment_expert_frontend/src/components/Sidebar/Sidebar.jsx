@@ -19,11 +19,9 @@ const Sidebar = () => {
           <FaTachometerAlt /> Dashboard
         </Link>
         <Link to="/user/assignments">
-          <FaTasks /> Assignments
+          <FaTasks /> Tasks
         </Link>
-        <Link to="/user/profile">
-          <FaUser /> Profile
-        </Link>
+    
         
       </nav>
     </div>
