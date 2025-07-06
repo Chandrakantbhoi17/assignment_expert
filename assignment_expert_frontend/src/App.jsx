@@ -5,6 +5,8 @@ import Login from './Pages/auth/Login/Login.jsx';
 import UserRoutes from './routes/UserRoutes'; // <-- Import your user-specific routes
 import PublicLayout from './layouts/PublicLayout/PublicLayout.jsx';
 import Home from './Pages/Home/Home.jsx';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
 function App() {
   return (
     <Routes>
