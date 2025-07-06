@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import Cookies from 'js-cookie';
 import { AuthContext } from '@/context/AuthContext.jsx';
 import apiClient from '../../services/ApiClient';
 
@@ -10,6 +9,12 @@ const TaskList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user } = useContext(AuthContext);
+
+  // Utility to truncate text
+  const truncateText = (text, maxLength = 30) => {
+    if (!text) return '—';
+    return text.length > maxLength ? text.substring(0, maxLength) + '…' : text;
+  };
 
   const transformData = (data) =>
     data.map((item) => ({
@@ -27,20 +32,11 @@ const TaskList = () => {
     }));
 
   const fetchAssignments = async () => {
-    const token = Cookies.get('token');
-    if (!token) {
-      setError('Access token not found');
-      setLoading(false);
-      return;
-    }
-
     const endpoint =
-      user?.role === 'admin'
-        ? '/assignments'
-        : '/assignments/my';
+      user?.role === 'admin' ? '/assignments' : '/assignments/my';
 
     try {
-      const response = await apiClient.get(endpoint)
+      const response = await apiClient.get(endpoint);
       const data = await response.data;
       setTableData(transformData(data));
     } catch (err) {
@@ -51,26 +47,13 @@ const TaskList = () => {
   };
 
   const handleAction = async (id, action) => {
-    const token = Cookies.get('token');
     const assignment = tableData.find((item) => item.id === id);
-    const url = `http://52.66.34.20/assignments/${id}`;
 
     try {
-      const response = await fetch(url, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          amount: assignment.amount || 0,
-          approval_status: action,
-        }),
+      await apiClient.patch(`/assignments/${id}`, {
+        amount: assignment.amount || 0,
+        approval_status: action,
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to update assignment status');
-      }
 
       setTableData((prev) =>
         prev.map((item) =>
@@ -95,7 +78,7 @@ const TaskList = () => {
   return (
     <div className="container mt-4">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2 className="text-center w-100">Assignments</h2>
+        <h2>Tasks</h2>
         {user?.role === 'user' && (
           <button
             className="btn btn-primary"
@@ -127,8 +110,8 @@ const TaskList = () => {
             <tbody>
               {tableData.map((item) => (
                 <tr key={item.id}>
-                  <td>{item.title}</td>
-                  <td>{item.details}</td>
+                  <td title={item.title}>{truncateText(item.title, 25)}</td>
+                  <td title={item.details}>{truncateText(item.details, 40)}</td>
                   <td>
                     <span
                       className={`badge ${
@@ -143,7 +126,6 @@ const TaskList = () => {
                     </span>
                   </td>
 
-                  {/* Admin can set amount only if not already set */}
                   <td>
                     {user?.role === 'admin' && item.amount === 0 ? (
                       <div className="d-flex justify-content-center">
@@ -167,25 +149,11 @@ const TaskList = () => {
                         <button
                           className="btn btn-sm btn-success"
                           onClick={async () => {
-                            const token = Cookies.get('token');
-                            const url = `http://52.66.34.20/assignments/${item.id}`;
-
                             try {
-                              const response = await fetch(url, {
-                                method: 'PATCH',
-                                headers: {
-                                  'Content-Type': 'application/json',
-                                  Authorization: `Bearer ${token}`,
-                                },
-                                body: JSON.stringify({
-                                  amount: Number(item.tempAmount),
-                                  approval_status: item.approval_status,
-                                }),
+                              await apiClient.patch(`/assignments/${item.id}`, {
+                                amount: Number(item.tempAmount),
+                                approval_status: item.approval_status,
                               });
-
-                              if (!response.ok) {
-                                throw new Error('Failed to set amount');
-                              }
 
                               setTableData((prev) =>
                                 prev.map((row) =>

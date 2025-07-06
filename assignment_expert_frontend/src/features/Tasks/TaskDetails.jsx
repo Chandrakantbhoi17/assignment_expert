@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import Cookies from 'js-cookie';
-import axios from 'axios';
-import { AuthContext } from '@/context/AuthContext.jsx'; // Adjust if needed
+import { AuthContext } from '@/context/AuthContext.jsx';
 import apiClient from '../../services/ApiClient';
 
 const TaskDetails = () => {
@@ -15,12 +13,6 @@ const TaskDetails = () => {
 
   useEffect(() => {
     const fetchTask = async () => {
-      const token = Cookies.get('token');
-      if (!token) {
-        setError('Authentication token not found');
-        return;
-      }
-
       try {
         const res = await apiClient.get(`/assignments/${id}`);
         setTask(res.data);
@@ -46,25 +38,12 @@ const TaskDetails = () => {
       return;
     }
 
-    const token = Cookies.get('token');
-    if (!token) {
-      alert('Authentication token missing.');
-      return;
-    }
-
     const halfAmount = Math.round(task.amount / 2);
 
     try {
-      const response = await axios.post(
-        'http://52.66.34.20/create-order/',
-        { amount: halfAmount },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await apiClient.post('/create-order/', {
+        amount: halfAmount,
+      });
 
       const { order_id, amount, currency } = response.data;
 
@@ -77,23 +56,17 @@ const TaskDetails = () => {
         order_id,
         handler: async function (paymentResponse) {
           try {
-            await axios.post(
-              'http://52.66.34.20/verify-payment/',
-              {
-                order_id,
-                payment_id: paymentResponse.razorpay_payment_id,
-                signature: paymentResponse.razorpay_signature,
-                assignment_id: id,
-                amount_paid: halfAmount,
-              },
-              {
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            );
+            await apiClient.post('/verify-payment/', {
+              order_id,
+              payment_id: paymentResponse.razorpay_payment_id,
+              signature: paymentResponse.razorpay_signature,
+              assignment_id: id,
+              amount_paid: halfAmount,
+            });
+
             alert('Payment verified and recorded!');
+            const res = await apiClient.get(`/assignments/${id}`);
+            setTask(res.data);
           } catch (err) {
             console.error('Verification failed:', err);
             alert('Payment verification failed.');
@@ -125,39 +98,25 @@ const TaskDetails = () => {
       return;
     }
 
-    const token = Cookies.get('token');
-    if (!token) {
-      alert('Authentication token missing.');
-      return;
-    }
-
     const formData = new FormData();
     formData.append('file', file);
 
     try {
       setUploading(true);
-
-      await axios.post(
-        `http://52.66.34.20/admin/assignments/${id}/upload-final`,
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await apiClient.post(`/admin/assignments/${id}/upload-final`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
       alert('File uploaded successfully!');
       setFile(null);
-      setUploading(false);
-
-      // Refresh task details
       const res = await apiClient.get(`/assignments/${id}`);
       setTask(res.data);
     } catch (err) {
       console.error('Upload failed:', err);
       alert('File upload failed.');
+    } finally {
       setUploading(false);
     }
   };
@@ -204,32 +163,52 @@ const TaskDetails = () => {
           <li className="list-group-item">
             <strong>Paid:</strong> ₹{task.total_paid || 0}
           </li>
-          <li className="list-group-item">
-            <strong>Final file:</strong>
-            <input
-              type="file"
-              onChange={handleFileChange}
-              className="form-control d-inline w-auto ms-2"
-            />
-            <button
-              className="btn btn-sm btn-outline-primary ms-2"
-              onClick={handleUpload}
-              disabled={uploading}
-            >
-              {uploading ? 'Uploading...' : 'Upload'}
-            </button>
-          </li>
 
+          {/* Task file display */}
+          {task.file_url && (
+            <li className="list-group-item">
+              <strong>Task File:</strong>{' '}
+              <a
+                href={task.file_url}
+                className="btn btn-sm btn-outline-secondary ms-2"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Download File
+              </a>
+            </li>
+          )}
+
+          {/* Upload final file (only for admin and if not already completed) */}
+          {user?.role === 'admin' && !task.completed_url && (
+            <li className="list-group-item">
+              <strong>Final file:</strong>
+              <input
+                type="file"
+                onChange={handleFileChange}
+                className="form-control d-inline w-auto ms-2"
+              />
+              <button
+                className="btn btn-sm btn-outline-primary ms-2"
+                onClick={handleUpload}
+                disabled={uploading}
+              >
+                {uploading ? 'Uploading...' : 'Upload'}
+              </button>
+            </li>
+          )}
+
+          {/* Final submitted file by admin */}
           {task.completed_url && (
             <li className="list-group-item">
-              <strong>Download:</strong>{' '}
+              <strong>Final file:</strong>{' '}
               <a
                 href={task.completed_url}
                 className="btn btn-sm btn-outline-secondary ms-2"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Download File
+                Download Final
               </a>
             </li>
           )}
