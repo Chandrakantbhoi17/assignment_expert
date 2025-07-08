@@ -188,4 +188,33 @@
   }
 }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.anime {
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* Optional: Add delay for staggered effect */
+.anime:nth-child(1) {
+  animation-delay: 0.2s;
+}
+.anime:nth-child(2) {
+  animation-delay: 0.4s;
+}
+.anime:nth-child(3) {
+  animation-delay: 0.6s;
+}
+.anime:nth-child(4) {
+  animation-delay: 0.8s;
+}
 

@@ -8,14 +8,14 @@ function Home() {
       {/* Hero Section */}
       <div className={style.HomeContainer}>
         <div className={style.content}>
-          <div className={style.textSection}>
-            <h1>Your Smart Hub for Assignments and Deadlines</h1>
-            <p>Centralize your work, streamline communication, and keep everything on track.</p>
-            <Link to="/signup" className={style.tryButton}>Try it out</Link>
-          </div>
-          <div className={style.imageSection}>
-            <img src={assignmentwork} alt="Assignment Work" />
-          </div>
+            <div className={style.textSection}>
+              <h1 className={style.anime}>Your Smart Hub for Assignments and Deadlines</h1>
+              <p className={style.anime} >Centralize your work, streamline communication, and keep everything on track.</p>
+              <Link to="/signup" className={`${style.tryButton} ${style.anime}`}>Try it out</Link>
+            </div>
+            <div className={`${style.imageSection} `}>
+              <img src={assignmentwork} alt="Assignment Work" className={`${style.anime}`} />
+            </div>
         </div>
       </div>
 

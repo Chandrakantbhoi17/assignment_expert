@@ -3,7 +3,7 @@ from uuid import uuid4
 from fastapi import UploadFile
 from app.core.config import settings
 
-def upload_file_to_s3(file: UploadFile, assignment_id:int) -> str:
+def upload_file_to_s3(current_user_id:int,file: UploadFile, assignment_id:int) -> str:
     s3 = boto3.client(
         "s3",
         aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
@@ -12,7 +12,7 @@ def upload_file_to_s3(file: UploadFile, assignment_id:int) -> str:
     )
 
     file_ext = file.filename.split(".")[-1]
-    key = f"{assignment_id}/{uuid4()}.{file_ext}"
+    key = f"{current_user_id}/{assignment_id}/{uuid4()}.{file_ext}"
 
     s3.upload_fileobj(
         file.file,

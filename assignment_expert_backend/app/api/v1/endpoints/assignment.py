@@ -63,7 +63,7 @@ def upload_assignment_file(
     if not assignment:
         raise HTTPException(status_code=404, detail="Assignment not found")
 
-    file_url = upload_file_to_s3(file,assignment_id)
+    file_url = upload_file_to_s3(current_user.id,file,assignment_id)
     assignment.file_url = file_url
     db.commit()
     return {"file_url": file_url}
