@@ -1,20 +1,52 @@
-version: "3.9"
+version: "3.8"
 
 services:
   backend:
     build:
       context: ./assignment_expert_backend
-    container_name: assignment_expert_backend_cotainer
+    container_name: assignment_expert_backend_container
     ports:
       - "8000:8000"
     volumes:
       - ./assignment_expert_backend:/app
-    
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    depends_on:
+      - db
+    env_file:
+      - ./assignment_expert_backend/.env
 
   frontend:
     build:
       context: ./assignment_expert_frontend
     container_name: assignment_expert_frontend_container
     ports:
-      - "80:5173"  
+      - "80:5173"
+
+  db:
+    image: postgres:15
+    container_name: postgres_container
+    restart: always
+    env_file:
+      - ./assignment_expert_backend/.env
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_container
+    restart: always
+    env_file:
+      - ./assignment_expert_backend/.env
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
+  pgadmin_data:
