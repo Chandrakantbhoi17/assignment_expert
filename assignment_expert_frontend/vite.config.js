@@ -10,7 +10,8 @@ export default defineConfig({
     },
   },
   server: {
-    host: true,     // 👈 exposes the server to your network (0.0.0.0)
-    port: 5173,     // 👈 must match the EXPOSE in Dockerfile and docker run
+    host: true,            // Listen on 0.0.0.0
+    port: 5173,
+    allowedHosts: ['assignmentpros.in'],  // 👈 Add your domain here
   },
 });
