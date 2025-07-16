@@ -22,14 +22,14 @@ const Signup = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://52.66.34.20:8000/users/register', {
+      const response = await fetch('http://backend:8000/users/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ full_name, email, password }),
       });
-      console.log(response.data,"###################################")
+
 
    
 
