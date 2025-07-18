@@ -6,6 +6,8 @@ import userIcon from '../../../components/Assets/password.png';
 import emailIcon from '../../../components/Assets/email.png';
 import passwordIcon from '../../../components/Assets/password.png';
 
+import apiClient from '../../../services/apiClient.jsx'; // ← Use your axios instance
+
 const Signup = () => {
   const [full_name, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -22,24 +24,20 @@ const Signup = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://backend:8000/users/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ full_name, email, password }),
+      await apiClient.post('/users/register', {
+        full_name,
+        email,
+        password,
       });
 
-
-   
-
-    
-
-    
       navigate('/login');
     } catch (error) {
       console.error('Signup error:', error);
-      alert(`Signup failed: ${error.message}`);
+      alert(
+        `Signup failed: ${
+          error.response?.data?.message || error.message || 'Unknown error'
+        }`
+      );
     } finally {
       setLoading(false);
     }
