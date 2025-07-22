@@ -6,6 +6,7 @@ import apiClient from '../../services/ApiClient';
 const AddAssignment = () => {
   const [title, setTitle] = useState('');
   const [details, setDetails] = useState('');
+  const [note,setNote] = useState('');
   const [due_date, setDueDate] = useState('');
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -80,6 +81,14 @@ const AddAssignment = () => {
             onChange={(e) => setDetails(e.target.value)}
             required
           />
+              <label>Note:</label>
+            <textarea
+            rows="4"
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            required
+          />
+
 
           <label>Deadline:</label>
           <input

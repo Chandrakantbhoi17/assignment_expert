@@ -2,7 +2,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const API_URL = "http://backend:8000";
+const API_URL = "http://localhost:8000";
 
 // Create the axios instance
 const apiClient = axios.create({

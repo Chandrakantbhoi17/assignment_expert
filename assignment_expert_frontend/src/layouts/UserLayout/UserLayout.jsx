@@ -7,7 +7,11 @@ const UserLayout = () => {
   return (
     <div className={styles.layout}>
       <Sidebar />
+      
       <main className={styles.mainContent}>
+      <Navbar/>
+       
+            
  
 
         <Outlet />

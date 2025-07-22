@@ -4,6 +4,7 @@
   color: white;
   height: 100vh;
   padding: 1rem;
+  position: relative;
 }
 
 .logo {

@@ -7,7 +7,7 @@ const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
 
   return (
-    <nav className={`navbar navbar-expand-lg navbar-dark bg-dark px-4 fixed-top ${styles.navbar}`}>
+    <nav className={`navbar navbar-expand-lg navbar-dark bg-dark px-4  ${styles.navbar}`}>
       <div className="container-fluid">
         {/* Logo */}
         <Link className="navbar-brand" to="/">
