@@ -14,3 +14,4 @@ class User(Base):
     role = Column(Enum(UserRole), default=UserRole.USER, nullable=True)
 
     assignments = relationship("Assignment", back_populates="creator")
+    

@@ -10,7 +10,7 @@ import ProtectedRoute from './ProtectedRoute'; // path as needed
 const UserRoutes = () => {
   return (
     <Routes>
-      <Route element={<ProtectedRoute />}> {/* ✅ only checks if logged in */}
+      <Route element={<ProtectedRoute />}> =
         <Route element={<UserLayout />}>
           <Route path="dashboard" element={<UserDashboard />} />
           <Route path="assignments" element={<TaskList />} />

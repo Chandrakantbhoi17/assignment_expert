@@ -50,9 +50,11 @@ const UserDashboard = () => {
   return (
     <div className={styles.dashboard}>
       <h2 className={styles.heading}>
+
+      
         {user?.role === 'admin' ? 'Admin' : 'User'} Dashboard
       </h2>
-
+        
       {loading ? (
         <p>Loading summary...</p>
       ) : (

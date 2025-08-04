@@ -1,13 +1,42 @@
-assignment_expert_backend/env/
-assignment_expert_backend/migrations/versions/
+# Bytecode / caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Python virtual environments
 env/
+venv/
 myvev/
+assignment_expert_backend/env/
+.venv/
 
+# Environment files / secrets
+.env
+*.env
 
+# Archives / backups / builds
+*.zip
+dist/
+build/
+*.egg-info/
+
+# Frontend dependencies
 assignment_expert_frontend/node_modules/
 
+# IDE / editor / OS cruft
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
 
+# Databases (if not intentionally versioned)
+*.db
 
+# Logs
+*.log
 
+# Static build output (optional; remove if you do want to track it)
+# assignment_expert_frontend/dist/
 
-
+# Misc
+*.secret
