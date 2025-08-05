@@ -10,8 +10,13 @@ export default defineConfig({
     },
   },
   server: {
-    host: true,            // Listen on 0.0.0.0
+    host: true,                    // Listen on 0.0.0.0
     port: 5173,
-    allowedHosts: ['assignmentpros.in'],  // 👈 Add your domain here
+    allowedHosts: ['assignmentpros.in'],  // Optional, for dev domain
   },
+  build: {
+    outDir: 'dist',               // Make sure this matches Nginx config
+    emptyOutDir: true,
+  },
+  base: '/',                      // ✅ Important for correct routing in Nginx
 });
