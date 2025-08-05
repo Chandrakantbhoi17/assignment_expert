@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Signup.module.css';
 
-import userIcon from '../../../components/Assets/password.png';
-import emailIcon from '../../../components/Assets/email.png';
-import passwordIcon from '../../../components/Assets/password.png';
+import userIcon from '@/components/Assets/password.png';
+import emailIcon from '@/components/Assets/email.png';
+import passwordIcon from '@/components/Assets/password.png';
 
-import apiClient from '../../../services/apiClient.jsx'; // ← Use your axios instance
+import apiClient from '@/services/ApiClient';
 
 const Signup = () => {
   const [full_name, setFullName] = useState('');
