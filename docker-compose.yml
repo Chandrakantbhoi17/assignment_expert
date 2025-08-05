@@ -16,7 +16,6 @@ services:
       context: ./assignment_expert_frontend
       dockerfile: Dockerfile.prod
     container_name: assignment_expert_frontend_container
-    run: npm run build # optional if done in Dockerfile
     depends_on:
       - backend
 
