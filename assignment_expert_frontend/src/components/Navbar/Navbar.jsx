@@ -7,7 +7,7 @@ const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
 
   return (
-    <nav className={`navbar navbar-expand-lg navbar-dark bg-dark px-4  ${styles.navbar}`}>
+    <nav className={`navbar navbar-expand-lg navbar-dark bg-dark px-4  ${styles.navbar} w-100`}>
       <div className="container-fluid">
         {/* Logo */}
         <Link className="navbar-brand" to="/">
@@ -33,19 +33,13 @@ const Navbar = () => {
             {user ? (
               <li className="nav-item dropdown">
                 <button
-                  className="btn bg-light text-dark rounded-circle d-flex justify-content-center align-items-center"
-                  id="userDropdown"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                  style={{
-                    width: '40px',
-                    height: '40px',
-                    fontWeight: 'bold',
-                    border: 'none',
-                    padding: 0,
-                  }}
-                >
-                  {user.full_name ? user.full_name[0].toUpperCase() : 'U'}
+                    className={"btn bg-light text-dark rounded-circle ..."}
+                    id="userDropdown"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                   <span className={styles.avatarLetter}>
+                    {user.full_name ? user.full_name[0].toUpperCase() : 'U'}
+                   </span>
                 </button>
 
                 <ul className="dropdown-menu dropdown-menu-end mt-2 text-center" aria-labelledby="userDropdown">
