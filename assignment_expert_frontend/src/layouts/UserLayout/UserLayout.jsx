@@ -5,11 +5,13 @@ import styles from './UserLayout.module.css';
 import Navbar from '../../components/Navbar/Navbar';
 const UserLayout = () => {
   return (
+    <>
     <div className={styles.layout}>
+       
       <Sidebar />
-      
+        <Navbar/>
       <main className={styles.mainContent}>
-      <Navbar/>
+   
        
             
  
@@ -17,6 +19,8 @@ const UserLayout = () => {
         <Outlet />
       </main>
     </div>
+
+    </>
   );
 };
 
