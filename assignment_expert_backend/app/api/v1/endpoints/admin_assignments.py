@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from sqlalchemy.orm import Session
 from app.models.base import get_db
 from app.models.assignment import Assignment
-from app.utils.s3 import upload_file_to_s3
+from app.utils.s3 import upload_file
 from app.core.dependencies import get_current_user
 from app.models.user import User
 
@@ -26,7 +26,6 @@ def admin_upload_final_file(
     if assignment.approval_status.value != "approved":
         raise HTTPException(status_code=400, detail="Assignment must be approved before uploading final file")
 
-    file_url = upload_file_to_s3(file, assignment_id)
-    assignment.completed_url = file_url  # ensure this column exists
+    file_url = upload_file(current_user,file, assignment_id)
     db.commit()
     return {"final_file_url": file_url}

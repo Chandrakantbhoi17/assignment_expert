@@ -182,20 +182,20 @@ const TaskList = () => {
 
                   <td>{item.paid}</td>
 
-                  <td>
-                    {item.file_url ? (
-                      <a
-                        href={item.file_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn btn-sm btn-outline-secondary"
-                      >
-                        Download
-                      </a>
-                    ) : (
-                      <span className="text-muted">—</span>
-                    )}
-                  </td>
+                            <td>
+                  {item.file_url ? (
+                    <a
+                      href={item.file_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-sm btn-outline-secondary"
+                    >
+                      Download
+                    </a>
+                  ) : (
+                    <span className="text-muted">—</span>
+                  )}
+                </td>
 
                   <td>
                     {user?.role === 'admin' && item.approval_status === 'pending' ? (
