@@ -1,5 +1,32 @@
-# Step 1: Build React app
-FROM node:18 as build
+# # Step 1: Build React app with Vite
+# FROM node:18 AS build
+
+# WORKDIR /app
+
+# # Copy and install dependencies
+# COPY package*.json ./
+# RUN npm vite build
+
+
+# # Copy all project files
+# COPY . .
+
+# # Build the app
+# RUN npm vite build
+
+# # Step 2: Serve with Nginx
+# FROM nginx:alpine
+
+
+# # Copy built app from build stage
+# COPY --from=build /app/dist /usr/share/nginx/html
+
+# # Expose the port Nginx will run on
+# EXPOSE 80
+
+# # Run Nginx in foreground
+# CMD ["nginx", "-g", "daemon off;"]
+FROM node:18 AS build
 
 WORKDIR /app
 
@@ -7,9 +34,13 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
+
 RUN npm run build
 
-# Step 2: Output build folder only
 FROM nginx:alpine
 
 COPY --from=build /app/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]

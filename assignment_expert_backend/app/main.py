@@ -16,7 +16,7 @@ from app.api.v1.endpoints.admin_dashboard import router as v1_admin_dashboard_ro
 from app.api.v1.endpoints.user_dashboard import router as v1_user_dashboard_router
 
 def get_application():
-    _app = FastAPI(title=settings.PROJECT_NAME)
+    _app = FastAPI(title=settings.PROJECT_NAME,root_path="/api")
 
     # CORS
     _app.add_middleware(

@@ -25,5 +25,5 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
   },
-  base: '/', // ✅ necessary for proper routing behind Nginx
+  base: '/',
 });
