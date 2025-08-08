@@ -8,7 +8,7 @@ from pydantic import AnyHttpUrl, BaseSettings, PostgresDsn, validator
 class Settings(BaseSettings):
     PROJECT_NAME: str
     BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
-
+    BACKEND_URL:str
     @validator("BACKEND_CORS_ORIGINS", pre=True)
     def assemble_cors_origins(cls, v: Union[str, List[str]]) -> Union[List[str], str]:
         if isinstance(v, str) and not v.startswith("["):
@@ -36,14 +36,20 @@ class Settings(BaseSettings):
     ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int
 
+    # AWS S3 settings
     AWS_ACCESS_KEY_ID: str
     AWS_SECRET_ACCESS_KEY: str
     AWS_S3_BUCKET: str
     AWS_S3_REGION: str
 
+    # Razorpay
     RAZORPAY_KEY_ID: str
     RAZORPAY_SECRET_KEY: str
 
+    # Upload Mode
+    UPLOAD_TYPE: str = "local"  # "aws" or "local"
+    LOCAL_UPLOAD_DIR: str = "uploads"  # used when UPLOAD_TYPE is "local"
+   
     @validator("DATABASE_URI", pre=True, always=True)
     def assemble_db_connection(cls, v: Optional[str], values: Dict[str, Any]) -> str:
         db_type = (values.get("DB_TYPE") or "sqlite").lower()
@@ -57,7 +63,7 @@ class Settings(BaseSettings):
                 try:
                     p.parent.mkdir(parents=True, exist_ok=True)
                 except Exception:
-                    pass  # best-effort, let SQLite error surface if cannot create
+                    pass
                 abs_path = os.path.abspath(p.as_posix())
                 return f"sqlite:///{abs_path}"
             else:

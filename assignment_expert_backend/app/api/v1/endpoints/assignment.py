@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException,UploadFile,File
 from sqlalchemy.orm import Session
 from app.models.user import User
 from app.models.assignment import Assignment
-from app.utils.s3 import upload_file_to_s3
+from app.utils.s3 import upload_file
 from app.core.dependencies import get_current_user
 from app.schemas.assignment import AssignmentCreate,AssignmentOut,AssignmentUpdate
 from app.crud.assignment import create_assignment,get_all_assignments,update_assignment,get_all_assignments_admin,get_assignment
@@ -63,7 +63,7 @@ def upload_assignment_file(
     if not assignment:
         raise HTTPException(status_code=404, detail="Assignment not found")
 
-    file_url = upload_file_to_s3(current_user.id,file,assignment_id)
-    assignment.file_url = file_url
+    file_url = upload_file(current_user.id,file,assignment_id)
+    assignment.file_url=file_url
     db.commit()
     return {"file_url": file_url}

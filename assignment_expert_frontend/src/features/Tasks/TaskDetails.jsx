@@ -165,14 +165,13 @@ const TaskDetails = () => {
           </li>
 
           {/* Task file display */}
-          {task.file_url && (
+         {task.file_url && (
             <li className="list-group-item">
               <strong>Task File:</strong>{' '}
               <a
                 href={task.file_url}
                 className="btn btn-sm btn-outline-secondary ms-2"
-                target="_blank"
-                rel="noopener noreferrer"
+                download
               >
                 Download File
               </a>

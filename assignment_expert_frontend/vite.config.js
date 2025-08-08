@@ -10,13 +10,20 @@ export default defineConfig({
     },
   },
   server: {
-    host: true,                    // Listen on 0.0.0.0
+    host: true,
     port: 5173,
-    allowedHosts: ['assignmentpros.in'],  // Optional, for dev domain
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8000',  // for local dev
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
+    allowedHosts: ['assignmentpros.in'], // optional for dev
   },
   build: {
-    outDir: 'dist',               // Make sure this matches Nginx config
+    outDir: 'dist',
     emptyOutDir: true,
   },
-  base: '/',                      // ✅ Important for correct routing in Nginx
+  base: '/',
 });

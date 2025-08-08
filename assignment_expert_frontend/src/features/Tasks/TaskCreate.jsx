@@ -6,7 +6,7 @@ import apiClient from '../../services/ApiClient';
 const AddAssignment = () => {
   const [title, setTitle] = useState('');
   const [details, setDetails] = useState('');
-  const [note,setNote] = useState('');
+  const [note, setNote] = useState('');
   const [due_date, setDueDate] = useState('');
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -15,7 +15,7 @@ const AddAssignment = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!title || !details || !due_date) {
+    if (!title || !details || !due_date || !note) {
       alert('Please fill out all fields');
       return;
     }
@@ -27,6 +27,7 @@ const AddAssignment = () => {
       const response = await apiClient.post('/assignments/create', {
         title,
         details,
+        note,
         due_date,
       });
 
@@ -35,20 +36,21 @@ const AddAssignment = () => {
         throw new Error('Assignment ID missing in response');
       }
 
-      // Step 2: Upload file if exists
+      // Step 2: Upload file if it exists
       if (file) {
         const formData = new FormData();
         formData.append('file', file);
 
-        await apiClient.post(
-          `/assignments/${assignmentId}/upload-file`,
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          }
-        );
+        try {
+          const uploadRes = await apiClient.post(
+            `/assignments/${assignmentId}/upload-file`,
+            formData // Let Axios set the content-type automatically
+          );
+          console.log('Upload success:', uploadRes);
+        } catch (uploadError) {
+          console.error('File upload error:', uploadError);
+          alert('File upload failed.');
+        }
       }
 
       // Step 3: Navigate on success
@@ -81,14 +83,14 @@ const AddAssignment = () => {
             onChange={(e) => setDetails(e.target.value)}
             required
           />
-              <label>Note:</label>
-            <textarea
+
+          <label>Note:</label>
+          <textarea
             rows="4"
             value={note}
             onChange={(e) => setNote(e.target.value)}
             required
           />
-
 
           <label>Deadline:</label>
           <input
@@ -101,7 +103,10 @@ const AddAssignment = () => {
           <label>Upload File (optional):</label>
           <input
             type="file"
-            onChange={(e) => setFile(e.target.files[0])}
+            onChange={(e) => {
+              console.log('File selected:', e.target.files[0]);
+              setFile(e.target.files[0]);
+            }}
           />
 
           <div className="form-buttons">

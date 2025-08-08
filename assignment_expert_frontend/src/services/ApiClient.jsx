@@ -2,9 +2,8 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const API_URL = "http://localhost:8000";
+const API_URL = "/api";  // Relative path goes through nginx proxy
 
-// Create the axios instance
 const apiClient = axios.create({
   baseURL: API_URL,
   headers: {
@@ -12,21 +11,15 @@ const apiClient = axios.create({
   },
 });
 
-// Intercept requests before they are sent to include the token (if it exists)
 apiClient.interceptors.request.use(
   (config) => {
-   const token = Cookies.get("token") || null // Assuming the token is stored under the key 'token'
+    const token = Cookies.get("token") || null;
     if (token) {
-      config.headers["Authorization"] = `Bearer ${token}`; // Add token to Authorization header
+      config.headers["Authorization"] = `Bearer ${token}`;
     }
-    return config; // Return the modified config
+    return config;
   },
-  (error) => {
-    return Promise.reject(error); // Handle any errors in request
-  }
+  (error) => Promise.reject(error)
 );
 
 export default apiClient;
-
-
-
