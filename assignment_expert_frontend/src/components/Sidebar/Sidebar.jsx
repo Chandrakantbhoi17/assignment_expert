@@ -15,9 +15,11 @@ const Sidebar = () => {
 
 
       <nav className={styles.nav}>
-        <Link to="/user/dashboard">
-          <FaTachometerAlt /> Dashboard
-        </Link>
+         {user?.role === 'admin' && (
+          <Link to="/admin/dashboard">
+            <FaTachometerAlt /> Dashboard
+          </Link>
+        )}
         <Link to="/user/assignments">
           <FaTasks /> Tasks
         </Link>

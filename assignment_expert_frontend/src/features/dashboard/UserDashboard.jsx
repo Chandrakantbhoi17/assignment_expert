@@ -17,8 +17,14 @@ import {
   Cell,
   Legend,
   ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip
 } from 'recharts';
 
+const COLORS = ['#10b981', '#f59e0b', '#ef4444'];
 
 const UserDashboard = () => {
   const { user } = useContext(AuthContext);
@@ -54,37 +60,18 @@ const UserDashboard = () => {
     fetchSummary();
   }, [user]);
 
+  const pieData = [
+    { name: 'Approved', value: summary.approved },
+    { name: 'Pending', value: summary.pending },
+    { name: 'Rejected', value: summary.rejected },
+  ];
 
-  
-  <div className={styles.chartBox}>
-  <h4>Source</h4>
-  <ResponsiveContainer width="100%" height={250}>
-    <PieChart>
-      <Pie
-        dataKey="value"
-        data={[
-          { name: 'Desktop', value: 63 },
-          { name: 'Tablet', value: 15 },
-          { name: 'Phone', value: 22 },
-        ]}
-        cx="50%"
-        cy="50%"
-        outerRadius={80}
-        innerRadius={40}
-        label
-      >
-        <Cell fill="#6366f1" /> {/* Blue */}
-        <Cell fill="#f59e0b" /> {/* Orange */}
-        <Cell fill="#10b981" /> {/* Green */}
-      </Pie>
-      <Legend
-        verticalAlign="bottom"
-        iconType="circle"
-        align="center"
-      />
-    </PieChart>
-  </ResponsiveContainer>
-</div>
+  const barData = [
+    { name: 'Tasks', value: summary.total_assignments },
+    { name: 'Approved', value: summary.approved },
+    { name: 'Pending', value: summary.pending },
+    { name: 'Rejected', value: summary.rejected },
+  ];
 
   return (
     <div className={styles.dashboard}>
@@ -106,15 +93,40 @@ const UserDashboard = () => {
       <div className={styles.chartSection}>
         <div className={styles.chartBox}>
           <div className={styles.chartHeader}>
-            <h4>Sales</h4>
-            <span className={styles.syncText}></span>
+            <h4>Task Overview</h4>
           </div>
-          <div className={styles.fakeChart}>[Bar Chart ]</div>
+          <ResponsiveContainer width="100%" height={250}>
+            <BarChart data={barData}>
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="value" fill="#c1dff8ff" radius={[6, 6, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
 
         <div className={styles.chartBox}>
-          <h4>Traffic Source</h4>
-          <div className={styles.fakePieChart}></div>
+          <h4>Status Breakdown</h4>
+          <ResponsiveContainer width="100%" height={250}>
+            <PieChart>
+              <Pie
+                data={pieData}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                 label={({ name, percent }) =>
+                  `${name} ${(percent * 100).toFixed(0)}%`
+                }
+                outerRadius={80}
+                dataKey="value"
+              >
+                {pieData.map((_, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index]} />
+                ))}
+              </Pie>
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
         </div>
       </div>
     </div>

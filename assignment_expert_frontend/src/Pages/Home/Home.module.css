@@ -34,6 +34,11 @@
   text-align: left;
 }
 
+/* .textSection h1{
+  font-size: 40px;
+} */
+
+
 .imageSection {
   flex: 1;
   min-width: 300px;
