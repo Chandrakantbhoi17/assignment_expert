@@ -3,14 +3,12 @@ services:
     build:
       context: ./assignment_expert_backend
     container_name: assignment_expert_backend_container
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
     env_file:
       - ./assignment_expert_backend/.env
     working_dir: /app
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000
-    networks:
-      - app_net
 
   frontend:
     build:
@@ -19,21 +17,15 @@ services:
     container_name: assignment_expert_frontend_container
     depends_on:
       - backend
-    networks:
-      - app_net
+
   nginx:
-    build:
-      context: ./assignment_expert_frontend
-      dockerfile: Dockerfile.prod
+    image: nginx:alpine
     container_name: nginx_container
     ports:
       - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+ 
     depends_on:
       - frontend
       - backend
-    networks:
-      - app_net
-
-networks:
-  app_net:
-    driver: bridge
