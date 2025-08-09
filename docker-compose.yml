@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   backend:
     build:
@@ -15,8 +17,11 @@ services:
       context: ./assignment_expert_frontend
       dockerfile: Dockerfile.prod
     container_name: assignment_expert_frontend_container
+    volumes:
+      - frontend_dist:/app/dist
     depends_on:
       - backend
+    command: sh -c "npm install && npm run build && tail -f /dev/null"
 
   nginx:
     image: nginx:alpine
@@ -25,7 +30,10 @@ services:
       - "80:80"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
- 
+      - frontend_dist:/usr/share/nginx/html
     depends_on:
       - frontend
       - backend
+
+volumes:
+  frontend_dist:
