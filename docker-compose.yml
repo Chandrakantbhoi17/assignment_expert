@@ -21,7 +21,6 @@ services:
       - backend
     networks:
       - app_net
-
   nginx:
     build:
       context: ./assignment_expert_frontend
