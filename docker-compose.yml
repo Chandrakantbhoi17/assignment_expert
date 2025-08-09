@@ -4,7 +4,7 @@ services:
       context: ./assignment_expert_backend
     container_name: assignment_expert_backend_container
     ports:
-    - "8000:8000"
+      - "8000:8000"
     env_file:
       - ./assignment_expert_backend/.env
     working_dir: /app
@@ -23,13 +23,12 @@ services:
       - app_net
 
   nginx:
-    image: nginx:alpine
+    build:
+      context: ./assignment_expert_frontend
+      dockerfile: Dockerfile.prod
     container_name: nginx_container
     ports:
       - "80:80"
-    volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - ./assignment_expert_frontend/dist:/usr/share/nginx/html
     depends_on:
       - frontend
       - backend
