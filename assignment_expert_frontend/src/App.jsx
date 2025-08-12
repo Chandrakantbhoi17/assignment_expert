@@ -18,7 +18,9 @@ function App() {
 
       {/* User Routes (dashboard, tasks, etc.) */}
       <Route path="/user/*" element={<UserRoutes />} />
+
     </Routes>
+   
   );
 }
 

@@ -2,6 +2,7 @@ import React, { useContext, useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext.jsx';
 import styles from './Navbar.module.css';
+import logo from '../../components/Assets/logo.png';
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
@@ -25,9 +26,14 @@ const Navbar = () => {
     <nav className={`navbar navbar-expand-lg navbar-dark bg-dark px-4 ${styles.navbar} w-100`}>
       <div className="container-fluid">
         {/* Logo */}
-        <Link className="navbar-brand" to="/">
-          <strong>Logo</strong>
-        </Link>
+        <Link className="navbar-brand d-flex align-items-center" to="/">
+          <img 
+            src={logo} 
+            alt="Logo" 
+            className={styles.logo}
+          />
+          </Link>
+        
 
         {/* Right Side */}
         <div className="d-flex align-items-center" ref={dropdownRef}>
@@ -45,11 +51,9 @@ const Navbar = () => {
 
               {dropdownOpen && (
                 <ul className="dropdown-menu dropdown-menu-end show mt-2 text-center" style={{ position: 'absolute', right: 0 }}>
+    
                   <li>
-                    <Link className="dropdown-item" to="/profile">Profile</Link>
-                  </li>
-                  <li>
-                    <Link className="dropdown-item" to="/settings">Settings</Link>
+                    <Link className="dropdown-item" to="/user/account">Account</Link>
                   </li>
                   <li>
                     <Link className="dropdown-item" to="/user/dashboard">Dashboard</Link>
@@ -58,6 +62,7 @@ const Navbar = () => {
                   <li>
                     <button className="dropdown-item text-danger" onClick={logout}>Logout</button>
                   </li>
+                
                 </ul>
               )}
             </div>
@@ -65,6 +70,8 @@ const Navbar = () => {
             <>
               <Link className="btn btn-outline-light btn-sm me-2" to="/signup">Signup</Link>
               <Link className="btn btn-light btn-sm" to="/login">Login</Link>
+             
+
             </>
           )}
         </div>

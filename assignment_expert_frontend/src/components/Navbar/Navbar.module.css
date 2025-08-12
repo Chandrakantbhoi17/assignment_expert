@@ -1,6 +1,18 @@
 .navbar{
     position: sticky !important;
     top: 0;
-
+    height: 60px;
+    width: auto;
     z-index: 100;
+}
+
+
+.logo {
+  height: 100px;
+  width: auto;
+  margin-top: 5px;
+  /* align-items: start; */
+  /* object-fit: contain; */
+ 
+  
 }

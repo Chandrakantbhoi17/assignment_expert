@@ -6,16 +6,18 @@ import TaskList from '../features/Tasks/TaskList';
 import AddAssignment from '../features/Tasks/TaskCreate';
 import TaskDetails from '../features/Tasks/TaskDetails';
 import ProtectedRoute from './ProtectedRoute'; // path as needed
-
+import Account from '../pages/auth/account/Account';
 const UserRoutes = () => {
   return (
     <Routes>
-      <Route element={<ProtectedRoute />}> =
+      <Route element={<ProtectedRoute />}>
         <Route element={<UserLayout />}>
           <Route path="dashboard" element={<UserDashboard />} />
           <Route path="assignments" element={<TaskList />} />
           <Route path="assignments/add" element={<AddAssignment />} />
           <Route path="assignments/view/:id" element={<TaskDetails />} />
+          <Route path="account" element={<Account />} />
+   
         </Route>
       </Route>
     </Routes>
