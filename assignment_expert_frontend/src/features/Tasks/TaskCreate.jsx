@@ -39,14 +39,24 @@ const AddAssignment = () => {
       // Step 2: Upload file if it exists
       if (file) {
         const formData = new FormData();
-        formData.append('file', file);
+        formData.append('file', file); // MUST match backend param name
+
+        // Debugging log
+        for (let pair of formData.entries()) {
+          console.log(pair[0] + ':', pair[1]);
+        }
 
         try {
           const uploadRes = await apiClient.post(
             `/assignments/${assignmentId}/upload-file`,
-            formData // Let Axios set the content-type automatically
+            formData,
+            {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            }
           );
-          console.log('Upload success:', uploadRes);
+          console.log('Upload success:', uploadRes.data);
         } catch (uploadError) {
           console.error('File upload error:', uploadError);
           alert('File upload failed.');

@@ -6,7 +6,7 @@ import TaskList from '../features/Tasks/TaskList';
 import AddAssignment from '../features/Tasks/TaskCreate';
 import TaskDetails from '../features/Tasks/TaskDetails';
 import ProtectedRoute from './ProtectedRoute'; // path as needed
-import Account from '../pages/auth/account/Account';
+import Account from '../Pages/auth/Account/Account';
 const UserRoutes = () => {
   return (
     <Routes>

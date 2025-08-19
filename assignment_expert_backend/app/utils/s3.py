@@ -36,4 +36,5 @@ def upload_file(current_user_id: int, file: UploadFile, assignment_id: int) -> s
         with open(file_path, "wb") as f:
             f.write(file.file.read())
 
-        return f"{settings.BACKEND_URL}\{file_path}"  # Or build URL if serving via StaticFiles
+        # Return a proper public URL
+        return f"{settings.BACKEND_URL}/uploads/{current_user_id}/{assignment_id}/{filename}"

@@ -51,8 +51,27 @@ def patch_assignment(
         current_user
     )
 
+# @router.post("/{assignment_id}/upload-file",tags=["User Service"])
+# def upload_assignment_file(
+#     assignment_id: int,
+#     file: UploadFile = File(...),
+#     db: Session = Depends(get_db),
+#     current_user = Depends(get_current_user)
+# ):
+#     assignment = db.query(Assignment).filter(Assignment.id == assignment_id).first()
+#     if not assignment:
+#         raise HTTPException(status_code=404, detail="Assignment not found")
 
-@router.post("/{assignment_id}/upload-file",tags=["User Service"])
+#     file_url = upload_file(current_user.id,file,assignment_id)
+#     assignment.file_url=file_url
+#     db.commit()
+#     return {"file_url": file_url}
+
+
+
+
+
+@router.post("/{assignment_id}/upload-file", tags=["User Service"])
 def upload_assignment_file(
     assignment_id: int,
     file: UploadFile = File(...),
@@ -63,7 +82,8 @@ def upload_assignment_file(
     if not assignment:
         raise HTTPException(status_code=404, detail="Assignment not found")
 
-    file_url = upload_file(current_user.id,file,assignment_id)
-    assignment.file_url=file_url
+    file_url = upload_file(current_user.id, file, assignment_id)
+    assignment.file_url = file_url
     db.commit()
+
     return {"file_url": file_url}
